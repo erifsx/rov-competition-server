@@ -1,0 +1,9 @@
+robot_serial:
+  port: /dev/ttyACM0
+  baudrate: 9600
+
+webcam:
+  enabled: false
+  height: 480
+  width: 320
+  framerate: 25

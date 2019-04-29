@@ -1,0 +1,30 @@
+<mat-card class="robot-video-stream">
+  <mat-card-title>Mr. Claw</mat-card-title>
+  <mat-card-content>
+    <div class="maintain-aspect-ratio">
+      <iframe [src]="videoUrl" frameborder="0"></iframe>
+    </div>
+    <mat-chip-list class="warning-indicators">
+      <mat-chip [color]="ws.connected?'indicator-ok':'indicator-warn'">Server: {{ws.connected?'connected':'not connected'}}</mat-chip>
+      <mat-chip [color]="robot.connected?'indicator-ok':'indicator-warn'">Robot: {{robot.connected?'connected':'disconnected'}}</mat-chip>
+      <mat-chip [color]="gamepad.connected?'indicator-ok':'indicator-warn'">Gamepad: {{gamepad.connected?'connected':'not connected'}}</mat-chip>
+
+    </mat-chip-list>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-accordion class="robot-dashboard">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header><mat-panel-title>Dashboard</mat-panel-title></mat-expansion-panel-header>
+    <p>
+
+    </p>
+  </mat-expansion-panel>
+  <mat-expansion-panel  [expanded]="true">
+    <mat-expansion-panel-header><mat-panel-title>Serial Console</mat-panel-title></mat-expansion-panel-header>
+    <p *ngFor="let message of messageLog">
+      {{message}}
+    </p>
+  </mat-expansion-panel>
+</mat-accordion>
