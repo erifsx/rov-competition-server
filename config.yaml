@@ -2,8 +2,17 @@ robot_serial:
   port: /dev/ttyACM0
   baudrate: 9600
 
+gpio:
+  enabled: true
+  # https://www.w3schools.com/nodejs/nodejs_raspberrypi_gpio_intro.asp
+  left_joy_x: 5
+  left_joy_y: 6
+  right_joy_x: 13
+  right_joy_y: 19
+
+
 webcam:
-  enabled: false
+  enabled: true
   height: 480
   width: 320
   framerate: 25

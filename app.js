@@ -7,10 +7,21 @@ const LiveCam = require('livecam');
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const fs = require('fs');
+const Gpio = require('pigpio').Gpio;
 const yaml = require('js-yaml');
 const config = yaml.safeLoad(fs.readFileSync('config.yaml', 'utf8'));
 
 // var usersRouter = require('./routes/users');
+
+const gpio = {};
+if(config.gpio.enabled) {
+    gpio['left_joy_x'] = new Gpio(config.gpio.left_joy_x, {mode: Gpio.OUTPUT});
+    gpio['left_joy_y'] = new Gpio(config.gpio.left_joy_y, {mode: Gpio.OUTPUT});
+    gpio['right_joy_x'] = new Gpio(config.gpio.right_joy_x, {mode: Gpio.OUTPUT});
+    gpio['right_joy_y'] = new Gpio(config.gpio.right_joy_y, {mode: Gpio.OUTPUT});
+}
+
+
 
 
 
@@ -94,14 +105,21 @@ function ws_server(io) {
             }
 
             socket.on('gamepad', joyVal => {
-                // console.log(joyVal);
-                serialPort.write(`${JSON.stringify(joyVal)}\n`, err => {
-                    if(err) {
-                       socket.emit('message', `cmd failed: ${err.message}`);
-                    } else {
-                        socket.emit('message', `cmd: ${JSON.stringify(joyVal)}`);
-                    }
-                });
+                if(config.gpio.enabled) {
+                    gpio['left_joy_x'].pwmWrite(Math.max(0, Math.min(255, Math.ceil((joyVal.leftStick.x + 1) * (255.0/2.0)))));
+                    gpio['left_joy_y'].pwmWrite(Math.max(0, Math.min(255, Math.ceil((joyVal.leftStick.y + 1) * (255.0/2.0)))));
+                    gpio['right_joy_x'].pwmWrite(Math.max(0, Math.min(255, Math.ceil((joyVal.rightStick.x + 1) * (255.0/2.0)))));
+                    gpio['right_joy_y'].pwmWrite(Math.max(0, Math.min(255, Math.ceil((joyVal.rightStick.y + 1) * (255.0/2.0)))));
+                    socket.emit('message', `cmd: ${JSON.stringify(joyVal)}`);
+                } else {
+                    serialPort.write(`${JSON.stringify(joyVal)}\n`, err => {
+                        if(err) {
+                            socket.emit('message', `cmd failed: ${err.message}`);
+                        } else {
+                            socket.emit('message', `cmd: ${JSON.stringify(joyVal)}`);
+                        }
+                    });
+                }
             });
         });
     });
