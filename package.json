@@ -9,7 +9,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
-    "js-yaml": "^3.13.0",
+    "js-yaml": "^3.13.1",
     "livecam": "^0.2.0",
     "morgan": "~1.9.0",
     "node-sass-middleware": "0.11.0",
