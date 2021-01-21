@@ -16,6 +16,6 @@
     "onoff": "^4.1.1",
     "pigpio": "^1.2.2",
     "serialport": "^7.1.4",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.4.0"
   }
 }
